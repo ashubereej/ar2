@@ -1221,3 +1221,7 @@ bg-[#f4f5ed]  -- white*/
     color: #fff;
   }
 }
+
+.sticky-section-mobile {
+  display: none;
+}
