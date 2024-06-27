@@ -839,23 +839,31 @@
           >
             <div
               class="w-[180px] h-[180px] date-div button-gradient p-4 rounded-2xl text-white flex items-center justify-center text-center flex-col"
+              id="days"
+              style="display: none"
+            >
+              <span class="num text-8xl font-medium">00</span>
+              <span class="num-str mt-5">Days</span>
+            </div>
+            <div
+              class="w-[180px] h-[180px] date-div button-gradient p-4 rounded-2xl text-white flex items-center justify-center text-center flex-col"
               id="hrs"
             >
-              <span class="num text-8xl font-medium">03</span>
+              <span class="num text-8xl font-medium">00</span>
               <span class="num-str mt-5">Hours</span>
             </div>
             <div
               class="w-[180px] h-[180px] date-div button-gradient p-4 rounded-2xl text-white flex items-center justify-center text-center flex-col"
               id="mins"
             >
-              <span class="num text-8xl font-medium">03</span>
+              <span class="num text-8xl font-medium">00</span>
               <span class="num-str mt-5">Minutes</span>
             </div>
             <div
               class="w-[180px] h-[180px] date-div button-gradient p-4 rounded-2xl text-white flex items-center justify-center text-center flex-col"
               id="sec"
             >
-              <span class="num text-8xl font-medium">03</span>
+              <span class="num text-8xl font-medium">00</span>
               <span class="num-str mt-5">Seconds</span>
             </div>
           </div>
@@ -2110,32 +2118,47 @@
 
       // const countDownDate = new Date().getTime() + 24 * 60 * 60 * 1000;
       // // custom-date
-      const countDownDate = new Date("Jul 25, 2024 15:00:00").getTime();
+      const countDownDate = new Date("Jun 28, 2024 24:00:00").getTime();
 
       const timer = setInterval(function () {
         const now = new Date().getTime();
-
         const distance = countDownDate - now;
 
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor(
           (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
         );
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.querySelector("#hrs .num").textContent = hours
-          .toString()
-          .padStart(2, "0");
-        document.querySelector("#mins .num").textContent = minutes
-          .toString()
-          .padStart(2, "0");
-        document.querySelector("#sec .num").textContent = seconds
-          .toString()
-          .padStart(2, "0");
+        const daysElement = document.querySelector("#days");
+        const hoursElement = document.querySelector("#hrs .num");
+        const minutesElement = document.querySelector("#mins .num");
+        const secondsElement = document.querySelector("#sec .num");
+
+        if (days > 0) {
+          daysElement.style.display = "flex";
+          document.querySelector("#sec").style.display = "none"
+          daysElement.querySelector(".num").textContent = days
+            .toString()
+            .padStart(2, "0");
+          hoursElement.textContent = hours.toString().padStart(2, "0");
+        } else {
+          daysElement.style.display = "none";
+          document.querySelector("#sec").style.display = "flex";
+          hoursElement.textContent = (hours + days * 24)
+            .toString()
+            .padStart(2, "0");
+        }
+
+        minutesElement.textContent = minutes.toString().padStart(2, "0");
+        secondsElement.textContent = seconds.toString().padStart(2, "0");
 
         if (distance < 0) {
           clearInterval(timer);
           document.querySelector("#calendar").textContent = "EXPIRED";
+          document.querySelector("#calendar").border = "1px dashed";
+          document.querySelector("#calendar").borderColor = "red";
         }
       }, 1000);
     </script>
